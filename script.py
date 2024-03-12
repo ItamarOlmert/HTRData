@@ -6,6 +6,7 @@ import io
 
 if __name__ == '__main__':
   dir = Path('.').parent
+  idx = 0
   for batch in (dir/"json_files").iterdir():
     with io.open(batch, encoding="utf-8") as file:
       data = json.load(file)
@@ -25,8 +26,9 @@ if __name__ == '__main__':
           text_words = text.read().split()
         par_words = (word for line in par.children for word in line.children)
         for j, (label, sample) in enumerate(zip(text_words, par_words)):
-          name = f"{image['id']}_{j}"
+          name = f"{idx:04d}"
           x, y, w, h = sample.destructure()
           cv2.imwrite(str(dir/"words"/"images"/f'{name}.jpg'), img[round(y):round(y+h), round(x):round(x+w)])
           with io.open(dir/"words"/"labels"/f'{name}.txt', 'w', encoding="utf-8") as f:
             f.write(label)
+          idx += 1
