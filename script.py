@@ -20,7 +20,8 @@ if __name__ == '__main__':
       imgpath = str(fpath/(image['id']+'.jpg'))
       img = cv2.imread(imgpath)
       img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-      pars = map(lambda p: Paragraph(p, lines, words, imgpath), paragraphs)
+      pars = list(map(lambda p: Paragraph(p, lines, words, imgpath), paragraphs))
+      pars.sort(key=lambda p: p.y)
       for i, par in enumerate(pars):
         with io.open(fpath/f'{i}.txt', encoding="utf-8") as text:
           text_words = text.read().split()
